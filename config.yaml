@@ -1,0 +1,45 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: install python3 and pip3
+    package:
+     name:
+       - python3
+       - python3-pip
+     state: latest
+     update_cache: yes
+
+  - name: set pip3 as default pip
+    command: "ln -sf /usr/bin/pip3 /usr/bin/pip"
+    when: (ansible_facts['distribution'] == "Ubuntu") or
+         (Ansible_facts['distribution'] =="CentOS")
+
+  - name: install java open-jdk in Ubuntu
+    apt:
+      name: openjdk-17-jdk
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install java open-jdk in CentOS
+    yum:
+      name: java-11-openjdk-devel
+      state: present
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: create motd file
+    template:
+      src: /home/altero/altero_PrelimExam/motd.j2
+      dest: /etc/motd
+
+  vars:
+      username: prelimexam_user
+
+  - name: create user
+    user:
+      name: "{{ username }}"
+      state: present
+      createhome: yes

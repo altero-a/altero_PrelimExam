@@ -1,5 +1,3 @@
-[remote_server]
-192.168.56.106
 
-[centos]
-192.168.56.110
+192.168.56.106 python3_package=python3 pip_package=libpython3-mod-pip
+192.168.56.110 python3_package=httpd pip_package=pip
